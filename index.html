@@ -10,8 +10,15 @@
 
 <body>
     <div id="root">
-        <div id="content">Loading artworks...</div>
+        <div id="content">Please wait. Loading artworks...</div>
         <p id="message"></p>
+        <input type="text" id="search" placeholder="Search artworks..." />
+        <div id="message" class="error-message"></div>
+        <div id="pagination">
+            <button id="prevPage" disabled>Previous</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Next</button>
+        </div>
         <script src="index.js" defer></script>
     </div>
 </body>
