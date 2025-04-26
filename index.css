@@ -87,5 +87,28 @@ body {
     font-size: 1.2em;
     text-align: center;
     margin: 20px 0;
-    display:block;
+    display:inline-block;
+}
+
+#search-container {
+    display: flex;
+    align-items: center; /* Vertically align the text and input box */
+    gap: 10px; /* Add spacing between the text and the input box */
+    padding: 20px;
+    justify-content: center; /* Center the container horizontally */
+}
+
+#search-container h1 {
+    font-size: 1.5rem; /* Adjust the font size of the heading */
+    margin: 0; /* Remove default margin */
+}
+
+#search {
+    width: 100%;
+    max-width: 300px; /* Limit the width of the search box */
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
