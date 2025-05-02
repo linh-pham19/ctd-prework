@@ -2,11 +2,21 @@ let currentPage = 1;
 const limit = 105; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
 
+const showLoading = () => {
+    document.querySelector('#loading').classList.remove('hidden');
+};
+
+const hideLoading = () => {
+    document.querySelector('#loading').classList.add('hidden');
+};
+
+
 // Fetch artworks from the API
 const getArtworks = async (page=1, limit) => {
     // const url = `https://api.artic.edu/api/v1/products?page=${page}&limit=${limit}`;
     const url = `https://api.artic.edu/api/v1/artworks?page=${page}&limit=${limit}`;
     try {
+        showLoading();
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -25,6 +35,8 @@ const getArtworks = async (page=1, limit) => {
     } catch (error) {
         console.error("Error fetching artworks:", error.message);
         throw error;
+    } finally {
+        hideLoading();
     }
 };
 
@@ -154,8 +166,6 @@ console.log("allArtworks in input",allArtworks)
     });
 });
 
-// Initial load
-loadArtworks(currentPage);
 
 
 
