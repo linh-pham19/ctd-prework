@@ -146,6 +146,15 @@ const searchArtworks = (searchTerm) => {
     });
 };
 
+document.querySelector('#clearButton').addEventListener('click', () => {
+    document.querySelector('#search').value = '';
+    document.querySelector('#content').innerHTML = renderArtworks(allArtworks);
+    renderPagination({
+        current_page: 1,
+        total_pages: Math.ceil(allArtworks.length / limit),
+    });
+});
+
 document.querySelector('#search').addEventListener('input', async() => {
     const searchTerm = document.querySelector('#search').value;
     console.log("searchTerm",searchTerm)
@@ -160,10 +169,6 @@ console.log("allArtworks in input",allArtworks)
     document.querySelector('#content').innerHTML = renderArtworks(filteredArtworks);
 
     // Update pagination (optional, depending on your logic)
-    renderPagination({
-        current_page: 1,
-        total_pages: Math.ceil(filteredArtworks.length / limit),
-    });
 });
 
 
