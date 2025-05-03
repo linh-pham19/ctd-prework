@@ -3,53 +3,53 @@ let currentPage = 1;
 const limit = 105; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
 
+const fetchArtworks = async ({ page = 1, limit = 100, fetchAll = false, maxArtworks = 210 } = {}) => {
+    let allArtworks = [];
+    let currentPage = page;
+    let totalPages = 0;
 
+    try {
+        do {
+            const url = `https://api.artic.edu/api/v1/artworks?page=${currentPage}&limit=${limit}`;
+            const data = await fetchData(url);
 
-// Fetch artworks from the API
-const getArtworks = async (page=1, limit) => {
-    const url = `https://api.artic.edu/api/v1/artworks?page=${page}&limit=${limit}`;
-        const data = await fetchData(url);
+            // Extract artworks and pagination info
+            const { data: artworks, pagination } = data;
 
-        // console.log("data.data",data.data);
-        // console.log("data.pagination",data.pagination)
-        // Return the artworks array
-        return {
-            artworks: data.data,
-            pagination: {
-                currentPage: data.pagination.current_page,
-                totalPages: data.pagination.total_pages
+            // Add fetched artworks to the array
+            allArtworks = allArtworks.concat(artworks);
+            totalPages = pagination.total_pages;
+
+            // Stop if fetching a single page or reaching the max limit
+            if (!fetchAll || allArtworks.length >= maxArtworks) {
+                break;
             }
-        }; 
+
+            currentPage++;
+        } while (currentPage <= totalPages);
+
+        // Trim the array if it exceeds the maxArtworks limit
+        if (allArtworks.length > maxArtworks) {
+            allArtworks = allArtworks.slice(0, maxArtworks);
+        }
+
+        return {
+            artworks: allArtworks,
+            pagination: {
+                currentPage,
+                totalPages: Math.ceil(allArtworks.length / limit),
+            },
+        };
+    } catch (error) {
+        console.error("Error fetching artworks:", error.message);
+        throw error;
+    }
 };
 
 const fetchAllArtworks = async () => {
-    let page = 1;
-    const maxArtworks = 210;
-    const limit = 100;
-
-    try {
-        while (allArtworks.length < maxArtworks) {
-            const { artworks, pagination } = await getArtworks(page, limit);
-            console.log("artworks",artworks.length)
-            allArtworks = allArtworks.concat(artworks);
-
-            if (allArtworks.length >= maxArtworks) {
-                console.log(`Fetched ${allArtworks.length} artworks, stopping at max limit.`);
-                allArtworks = allArtworks.slice(0, maxArtworks);
-                console.log("allArtworks after slice",allArtworks.length)
-                break;
-            }
-
-            page++;
-            if (page > pagination.totalPages) {
-                break;
-            }
-        }
-
-        console.log(`Fetched ${allArtworks.length} artworks in total.`);
-    } catch (err) {
-        console.error(`Error fetching all artworks: ${err.message}`);
-    }
+    const { artworks } = await fetchArtworks({ fetchAll: true, maxArtworks: 210 });
+    allArtworks = artworks;
+    console.log(`Fetched ${allArtworks.length} artworks in total.`);
 };
 
 // Render artworks as cards
@@ -91,7 +91,8 @@ const loadArtworks = async (page) => {
     renderPagination({
         currentPage: page,
         totalPages: Math.ceil(allArtworks.length / limit),
-    }, (newPage) => {
+    }, 
+    (newPage) => {
         currentPage = newPage;
         loadArtworks(currentPage);
     });
@@ -102,6 +103,7 @@ fetchAllArtworks().then(() => {
     loadArtworks(currentPage);
 });
 
+//SEARCH FUNCTIONALITY
 const searchArtworks = (searchTerm) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     return allArtworks.filter(({ title, artist_display, place_of_origin }) => {
