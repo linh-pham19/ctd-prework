@@ -1,14 +1,8 @@
+import {renderPagination} from './helper.js';
 let currentPage = 1;
 const limit = 105; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
 
-const showLoading = () => {
-    document.querySelector('#loading').classList.remove('hidden');
-};
-
-const hideLoading = () => {
-    document.querySelector('#loading').classList.add('hidden');
-};
 
 
 // Fetch artworks from the API
@@ -16,7 +10,6 @@ const getArtworks = async (page=1, limit) => {
     // const url = `https://api.artic.edu/api/v1/products?page=${page}&limit=${limit}`;
     const url = `https://api.artic.edu/api/v1/artworks?page=${page}&limit=${limit}`;
     try {
-        showLoading();
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,16 +21,14 @@ const getArtworks = async (page=1, limit) => {
         return {
             artworks: data.data,
             pagination: {
-                current_page: data.pagination.current_page,
-                total_pages: data.pagination.total_pages
+                currentPage: data.pagination.current_page,
+                totalPages: data.pagination.total_pages
             }
         }; 
     } catch (error) {
         console.error("Error fetching artworks:", error.message);
         throw error;
-    } finally {
-        hideLoading();
-    }
+    } 
 };
 
 const fetchAllArtworks = async () => {
@@ -92,14 +83,6 @@ const renderArtworks = (artworks) => {
         .join('');
 };
 
-// Function to render pagination
-const renderPagination = (pagination) => {
-    const { current_page, total_pages } = pagination;
-    document.querySelector('#pageInfo').textContent = `Page ${current_page} of ${total_pages}`;
-    document.querySelector('#prevPage').disabled = current_page === 1;
-    document.querySelector('#nextPage').disabled = current_page === total_pages;
-};
-
 // Function to load artworks and render them
 const loadArtworks = async (page) => {
     const startIndex = (page - 1) * limit;
@@ -108,8 +91,8 @@ const loadArtworks = async (page) => {
 
     document.querySelector('#content').innerHTML = renderArtworks(artworksToDisplay);
     renderPagination({
-        current_page: page,
-        total_pages: Math.ceil(allArtworks.length / limit),
+        currentPage: page,
+        totalPages: Math.ceil(allArtworks.length / limit),
     });
 };
 
@@ -132,12 +115,8 @@ fetchAllArtworks().then(() => {
 });
 
 const searchArtworks = (searchTerm) => {
-    console.log("allArtworks",allArtworks)
     return allArtworks.filter(({ title, artist_display, place_of_origin }) => {
         const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        console.log("title",title)
-        console.log("artist_display",artist_display)
-        console.log("place_of_origin",place_of_origin)
         return (
             title.toLowerCase().includes(lowerCaseSearchTerm) ||
             (artist_display && artist_display.toLowerCase().includes(lowerCaseSearchTerm)) ||
@@ -150,15 +129,15 @@ document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
     document.querySelector('#content').innerHTML = renderArtworks(allArtworks);
     renderPagination({
-        current_page: 1,
-        total_pages: Math.ceil(allArtworks.length / limit),
+        currentPage: 1,
+        totalPages: Math.ceil(allArtworks.length / limit),
     });
 });
 
+
 document.querySelector('#search').addEventListener('input', async() => {
     const searchTerm = document.querySelector('#search').value;
-    console.log("searchTerm",searchTerm)
-console.log("allArtworks in input",allArtworks)
+
      // Ensure all artworks are fetched before searching
      if (allArtworks.length === 0) {
         await fetchAllArtworks();
@@ -167,11 +146,4 @@ console.log("allArtworks in input",allArtworks)
 
     // Render the filtered artworks
     document.querySelector('#content').innerHTML = renderArtworks(filteredArtworks);
-
-    // Update pagination (optional, depending on your logic)
 });
-
-
-
-
-

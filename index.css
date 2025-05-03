@@ -151,3 +151,38 @@ animation: spin 1s linear infinite;
 .hidden {
 display: none;
 }
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.card-content {
+    margin-top: 10px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-price {
+    color: #3498db;
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.card-description {
+    font-size: 0.9rem;
+    color: #666;
+}
