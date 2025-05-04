@@ -1,4 +1,4 @@
-import { renderPagination } from './helper.js';
+import { renderPagination, fetchData, renderCards, loadItems } from './helper.js';
 let currentPage =1;
 let allProducts = []; // Array to store all fetched products
 const limit = 105; // Number of products per page
