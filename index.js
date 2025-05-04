@@ -4,7 +4,6 @@ const limit = 105; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
 
 const fetchArtworks = async ({ page = 1, limit = 100, fetchAll = false, maxArtworks = 210 } = {}) => {
-    let allArtworks = [];
     let currentPage = page;
     let totalPages = 0;
 
