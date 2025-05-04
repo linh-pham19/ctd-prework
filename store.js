@@ -112,3 +112,8 @@ fetchAllProducts().then(() => {
     loadProducts(currentPage);
 });
 
+// create a function to handle click return to artworks
+document.querySelector(`#storeLink`).onclick = () => {
+    window.location.href = `index.html`;
+}
+
