@@ -68,7 +68,7 @@ const fetchAllProducts = async () => {
     console.log(`Fetched ${allProducts.length} products in total.`);
 }
 const renderProducts = (products) => {
-    if (products.lenght === 0) {
+    if (products.length === 0) {
         return `
         <div class="no-results">
             <h2>No products found</h2>
@@ -104,7 +104,7 @@ const loadProducts = async (page) => {
        }, 
        (newPage) => {
            currentPage = newPage;
-           loadArtworks(currentPage);
+           loadProducts(currentPage);
        });
 };
 
