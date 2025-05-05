@@ -31,6 +31,7 @@ export const fetchData = async (url) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log("artworks",data.data)
         return data;
     } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -53,13 +54,13 @@ export const renderCards = (items, type) => {
             const imageUrl = image_url || `https://www.artic.edu/iiif/2/${image_id}/full/843,/0/default.jpg`;
             const artist = artist_display || "Unknown Artist";
             const origin = place_of_origin || "Unknown Origin";
-            const price = price_display || "Price not available";
+            const price = price_display || "";
             return `
                 <div class="card">
                     <img src="${imageUrl}" alt="${title}" class="card-image" />
                     <div class="card-content">
                         <h3 class="card-title">${title}</h3>
-                        <p class="card-artist">${artist}</p>
+                        <p class="card-artist">Artist: ${artist}</p>
                         <p class="card-origin">Origin: ${origin}</p>
                         <p class="card-price">${price}</p>
                     </div>
@@ -93,12 +94,7 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
     try {
         do {
             const url = `${endpoint}?page=${currentPage}&limit=${limit}`;
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const { data: items, pagination } = await response.json();
+            const {data: items, pagination} = await fetchData(url);
 
             // Add fetched items to the array
             allItems = allItems.concat(items);
