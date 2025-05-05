@@ -1,18 +1,20 @@
-import { renderPagination, fetchItems, loadItems, renderCards } from './helper.js';
+import { renderPagination, fetchItems, loadItems, renderCards, hideLoading, showLoading } from './helper.js';
 let currentPage = 1;
 const limit = 30; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
 
 const fetchAllArtworks = async () => {
+    showLoading(); // Show spinner while loading
+
     const { items: artworks } = await fetchItems({
         endpoint: 'https://api.artic.edu/api/v1/artworks',
         fetchAll: true,
         maxArtworks: 210,
         limit
     });
-    // 
-    console.log("after fetchItems()")
-    allArtworks = artworks;
+    hideLoading(); // Hide spinner after loading
+    console.log("after fetchItems()", artworks.length)
+    allArtworks = artworks.filter(({image_id}) => image_id); // Filter out artworks without images);
     console.log(`Fetched ${allArtworks.length} artworks in total.`);
 };
 
@@ -49,9 +51,12 @@ const searchArtworks = (searchTerm) => {
     });
 };
 
+
+
 document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
-    document.querySelector('#content').innerHTML = renderArtworks(allArtworks);
+    document.querySelector('#content').innerHTML = renderCards(allArtworks,"artworks");
+    console.log("totalPages",allArtworks.length / limit);
     renderPagination({
         currentPage: 1,
         totalPages: Math.ceil(allArtworks.length / limit),

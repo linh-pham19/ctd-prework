@@ -52,17 +52,17 @@ export const renderCards = (items, type) => {
         .filter(({ image_url, image_id }) => image_url || image_id)
         .map(({ title, image_url, image_id, price_display, artist_display, place_of_origin }) => {
             const imageUrl = image_url || `https://www.artic.edu/iiif/2/${image_id}/full/843,/0/default.jpg`;
-            const artist = artist_display || "Unknown Artist";
-            const origin = place_of_origin || "Unknown Origin";
-            const price = price_display || "";
+            const artist = type = "products" && artist_display ? `<p class="card-artist">Artist: ${artist_display}</p>`: '';
+            const origin = type = "products" && place_of_origin ? `<p class="card-price">Origin: ${place_of_origin}</p>` : '' ;
+            const price = type = "products" && price_display ? `<p class="card-price">Price: ${price_display}</p>` : '';
             return `
                 <div class="card">
-                    <img src="${imageUrl}" alt="${title}" class="card-image" />
+                    <img src="${imageUrl}" alt="${title}" class="card-image" loading="lazy"/>
                     <div class="card-content">
                         <h3 class="card-title">${title}</h3>
-                        <p class="card-artist">Artist: ${artist}</p>
-                        <p class="card-origin">Origin: ${origin}</p>
-                        <p class="card-price">${price}</p>
+                       ${artist}
+                        ${origin}
+                       ${price}
                     </div>
                 </div>
             `;
@@ -74,6 +74,7 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const paginatedItems = items.slice(startIndex, endIndex);
+    console.log(`Page: ${page}, Start Index: ${startIndex}, End Index: ${endIndex}, Items:`, paginatedItems);
 
     // render the items
     document.querySelector(containerSelector).innerHTML = renderFunction(paginatedItems);
@@ -124,4 +125,23 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
         console.error(`Error fetching items from ${endpoint}:`, error.message);
         throw error;
     }
+};
+
+export const showLoading = (type) => {
+    document.querySelector('#loading').classList.remove('hidden'); // Show spinner
+    if (type === 'artworks') {
+        document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
+    }
+    document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
+    document.querySelector('#content').classList.add('hidden'); // Hide content
+    document.querySelector('#pagination').classList.add('hidden'); // Hide pagination
+};
+
+export const hideLoading = (type) => {
+    document.querySelector('#loading').classList.add('hidden'); // Hide spinner
+    if (type === 'artworks') {
+        document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
+    }
+    document.querySelector('#content').classList.remove('hidden'); // Show content
+    document.querySelector('#pagination').classList.remove('hidden'); // Show pagination
 };
