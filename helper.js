@@ -70,9 +70,11 @@ export const renderCards = (items, type) => {
         ).join('');
 };
 
+// Slice the items (currentArtworks) array based on the current page and limit (number of items per page)
 export const loadItems = (items, page, limit, renderFunction, containerSelector, onPageChange) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
+    // sliced items for the current page
     const paginatedItems = items.slice(startIndex, endIndex);
     console.log(`Page: ${page}, Start Index: ${startIndex}, End Index: ${endIndex}, Items:`, paginatedItems);
 
@@ -96,6 +98,7 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
         do {
             const url = `${endpoint}?page=${currentPage}&limit=${limit}`;
             const {data: items, pagination} = await fetchData(url);
+            console.log("data from fetch",items)
 
             // Add fetched items to the array
             allItems = allItems.concat(items);

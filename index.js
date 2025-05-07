@@ -2,10 +2,13 @@ import { renderPagination, fetchItems, loadItems, renderCards, hideLoading, show
 let currentPage = 1;
 const limit = 30; // Number of artworks per page
 let allArtworks = []; // Array to store all fetched artworks
-let currentArtworks = []; // Array to store the current page of artworks
+// decided to use artworksToDisplay to store the artworks that are currently being displayed
+// either the full list or searched results
+let artworksToDisplay = []; // Array to store the current page of artworks
 const fetchAllArtworks = async () => {
     showLoading(); // Show spinner while loading
 
+    // destructure the `items` out of `data` object and rename it to `artworks`
     const { items: artworks } = await fetchItems({
         endpoint: 'https://api.artic.edu/api/v1/artworks',
         fetchAll: true,
@@ -13,37 +16,24 @@ const fetchAllArtworks = async () => {
         limit
     });
     hideLoading(); // Hide spinner after loading
-    console.log("after fetchItems()", artworks.length)
+    console.log("after fetchItems()", artworks)
     allArtworks = artworks.filter(({image_id}) => image_id); // Filter out artworks without images);
-    currentArtworks = allArtworks;
+    artworksToDisplay = allArtworks;
     console.log(`Fetched ${allArtworks.length} artworks in total.`);
 };
 
-// Load artworks and render them
-// const loadArtworks = (page) => {
-//     loadItems(
-//         allArtworks,
-//         page,
-//         limit,
-//         (artworks) => renderCards(artworks, 'artworks'), // Use renderCards for artworks
-//         '#content',
-//         // to handle page change triggered by pagination
-//         (newPage) => {
-//             currentPage = newPage;
-//             loadArtworks(currentPage);
-//         }
-//     );
-// };
 // Render the current page of artworks
 const renderCurrentPage = (page) => {
     loadItems(
-        currentArtworks, // Use currentArtworks for pagination
+        artworksToDisplay, // Use artworksToDisplay for pagination
         page,
         limit,
-        (artworks) => renderCards(artworks, 'artworks'),
+        // paginatedArtworks is the sliced array of artworksToDisplay
+        (paginatedArtworks) => renderCards(paginatedArtworks, 'artworks'),
         '#content',
-        (newPage) => {
-            currentPage = newPage; // Update the current page
+        // next page number when navigating through the pagination
+        (nextPage) => {
+            currentPage = nextPage; // Update the current page
             renderCurrentPage(currentPage); // Reload the new page
         }
     );
@@ -72,7 +62,7 @@ document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
     document.querySelector('#content').innerHTML = renderCards(allArtworks,"artworks");
     console.log("totalPages",allArtworks.length / limit);
-    currentArtworks = allArtworks;
+    artworksToDisplay = allArtworks;
     renderCurrentPage(1);
     // renderPagination({
     //     currentPage: 1,
@@ -88,8 +78,8 @@ document.querySelector('#search').addEventListener('input', async () => {
     if (allArtworks.length === 0) {
         await fetchAllArtworks();
     }
-    currentArtworks = searchArtworks(searchTerm);
-    console.log("filteredArtworks", currentArtworks);
+    artworksToDisplay = searchArtworks(searchTerm);
+    console.log("filteredArtworks", artworksToDisplay);
     renderCurrentPage(1);
     // Render the searched artworks
     // loadItems(
@@ -98,8 +88,8 @@ document.querySelector('#search').addEventListener('input', async () => {
     //     limit,
     //     (artworks) => renderCards(artworks, 'artworks'),
     //     '#content',
-    //     (newPage) => {
-    //         loadItems(filteredArtworks, newPage, limit, (artworks) => renderCards(artworks, 'artworks'), '#content', (newPage) => { });
+    //     (nextPage) => {
+    //         loadItems(filteredArtworks, nextPage, limit, (artworks) => renderCards(artworks, 'artworks'), '#content', (nextPage) => { });
     //     }
     // );
 });
