@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Products</title>
-    <link rel="stylesheet" href="store.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="root">
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
         <h1>Store Products</h1>
         <button id="storeLink">Return to artwork view</button>
         <div id="content">Loading store products...</div>
-        <div id="storePagination">
+        <div id="pagination">
             <button id="prevPage" disabled>Previous</button>
             <span id="pageInfo"></span>
             <button id="nextPage">Next</button>

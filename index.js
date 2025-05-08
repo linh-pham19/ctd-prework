@@ -64,10 +64,6 @@ document.querySelector('#clearButton').addEventListener('click', () => {
     console.log("totalPages",allArtworks.length / limit);
     artworksToDisplay = allArtworks;
     renderCurrentPage(1);
-    // renderPagination({
-    //     currentPage: 1,
-    //     totalPages: Math.ceil(allArtworks.length / limit),
-    // });
 });
 
 
