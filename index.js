@@ -15,7 +15,7 @@ const fetchAllArtworks = async () => {
         maxArtworks: 210,
         limit
     });
-    
+
     hideLoading(); // Hide spinner after loading
     allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images);
     artworksToDisplay = allArtworks;
@@ -55,15 +55,11 @@ const searchArtworks = (searchTerm) => {
     });
 };
 
-
-
 document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
-    document.querySelector('#content').innerHTML = renderCards(allArtworks, "artworks");
     artworksToDisplay = allArtworks;
     renderCurrentPage(1);
 });
-
 
 document.querySelector('#search').addEventListener('input', async () => {
     const searchTerm = document.querySelector('#search').value;

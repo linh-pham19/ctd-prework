@@ -135,7 +135,6 @@ export const showLoading = (type) => {
     if (type === 'artworks') {
         document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
     }
-    // document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
     document.querySelector('#content').classList.add('hidden'); // Hide content
     document.querySelector('#pagination').classList.add('hidden'); // Hide pagination
 };
