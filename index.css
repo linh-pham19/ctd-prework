@@ -6,6 +6,39 @@ body {
     color: #333;
 }
 
+/* Navbar container */
+#navbar {
+    background-color: #333; /* Dark background color */
+    padding: 10px 0; /* Add padding */
+    position: sticky; /* Make the navbar stick to the top */
+    top: 0;
+    z-index: 1000; /* Ensure it stays above other elements */
+    width: 100%;
+}
+
+/* Navbar list */
+.navbar {
+    list-style: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Display items in a row */
+    justify-content: center; /* Center the navbar items */
+    gap: 20px; /* Add spacing between items */
+    color: white;
+}
+
+.navbar-title {
+    color: white; /* Set the text color to white */
+    margin: 0; /* Optional: Remove default margin */
+    font-size: 1.5rem; /* Optional: Adjust the font size */
+}
+
+#navbar {
+    justify-items: center;
+    color: white; /* Set the default text color for the navbar */
+}
+
+
 #content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
