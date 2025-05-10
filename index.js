@@ -15,11 +15,10 @@ const fetchAllArtworks = async () => {
         maxArtworks: 210,
         limit
     });
+
     hideLoading(); // Hide spinner after loading
-    console.log("after fetchItems()", artworks)
-    allArtworks = artworks.filter(({image_id}) => image_id); // Filter out artworks without images);
+    allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images);
     artworksToDisplay = allArtworks;
-    console.log(`Fetched ${allArtworks.length} artworks in total.`);
 };
 
 // Render the current page of artworks
@@ -56,20 +55,11 @@ const searchArtworks = (searchTerm) => {
     });
 };
 
-
-
 document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
-    document.querySelector('#content').innerHTML = renderCards(allArtworks,"artworks");
-    console.log("totalPages",allArtworks.length / limit);
     artworksToDisplay = allArtworks;
     renderCurrentPage(1);
-    // renderPagination({
-    //     currentPage: 1,
-    //     totalPages: Math.ceil(allArtworks.length / limit),
-    // });
 });
-
 
 document.querySelector('#search').addEventListener('input', async () => {
     const searchTerm = document.querySelector('#search').value;
@@ -79,17 +69,5 @@ document.querySelector('#search').addEventListener('input', async () => {
         await fetchAllArtworks();
     }
     artworksToDisplay = searchArtworks(searchTerm);
-    console.log("filteredArtworks", artworksToDisplay);
     renderCurrentPage(1);
-    // Render the searched artworks
-    // loadItems(
-    //     filteredArtworks,
-    //     1,
-    //     limit,
-    //     (artworks) => renderCards(artworks, 'artworks'),
-    //     '#content',
-    //     (nextPage) => {
-    //         loadItems(filteredArtworks, nextPage, limit, (artworks) => renderCards(artworks, 'artworks'), '#content', (nextPage) => { });
-    //     }
-    // );
 });

@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Products</title>
-    <link rel="stylesheet" href="store.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="root">
+        <div id="navbar">
+            <h1 class="navbar-title">Welcome to the Art Institute of Chicago</h1>
+        </div>
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
         <h1>Store Products</h1>
         <button id="storeLink">Return to artwork view</button>
         <div id="content">Loading store products...</div>
-        <div id="storePagination">
+        <div id="pagination">
             <button id="prevPage" disabled>Previous</button>
             <span id="pageInfo"></span>
             <button id="nextPage">Next</button>
         </div>
-        <script src="store.js" type="module" defer></script>
+        <script src="store.js" type="module"></script>
     </div>
 </body>
 </html>
