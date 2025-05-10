@@ -130,20 +130,10 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
     }
 };
 
-export const showLoading = (type) => {
+export const showLoading = () => {
     document.querySelector('#loading').classList.remove('hidden'); // Show spinner
-    if (type === 'artworks') {
-        document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
-    }
-    document.querySelector('#content').classList.add('hidden'); // Hide content
-    document.querySelector('#pagination').classList.add('hidden'); // Hide pagination
 };
 
 export const hideLoading = (type) => {
     document.querySelector('#loading').classList.add('hidden'); // Hide spinner
-    if (type === 'artworks') {
-        document.querySelector('#search-container').classList.add('hidden'); // Hide search bar
-    }
-    document.querySelector('#content').classList.remove('hidden'); // Show content
-    document.querySelector('#pagination').classList.remove('hidden'); // Show pagination
 };

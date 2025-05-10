@@ -6,36 +6,46 @@ let allArtworks = []; // Array to store all fetched artworks
 // either the full list or searched results
 let artworksToDisplay = []; // Array to store the current page of artworks
 const fetchAllArtworks = async () => {
-    showLoading(); // Show spinner while loading
+    try {
+        showLoading(); 
 
-    // destructure the `items` out of `data` object and rename it to `artworks`
-    const { items: artworks } = await fetchItems({
-        endpoint: 'https://api.artic.edu/api/v1/artworks',
-        fetchAll: true,
-        maxArtworks: 210,
-        limit
-    });
+        const { items: artworks } = await fetchItems({
+            endpoint: 'https://api.artic.edu/api/v1/artworks',
+            fetchAll: true,
+            maxArtworks: 210,
+            limit: 30
+        });
 
-    hideLoading(); // Hide spinner after loading
-    allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images);
-    artworksToDisplay = allArtworks;
+        allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images
+        artworksToDisplay = allArtworks;
+
+        hideLoading(); // Hide spinner after successful load
+    } catch (error) {
+        console.error('Error fetching artworks:', error);
+        hideLoading(); // Hide spinner even if there's an error
+    }
 };
 
 // Render the current page of artworks
 const renderCurrentPage = (page) => {
-    loadItems(
-        artworksToDisplay, // Use artworksToDisplay for pagination
-        page,
-        limit,
-        // paginatedArtworks is the sliced array of artworksToDisplay
-        (paginatedArtworks) => renderCards(paginatedArtworks, 'artworks'),
-        '#content',
-        // next page number when navigating through the pagination
-        (nextPage) => {
-            currentPage = nextPage; // Update the current page
-            renderCurrentPage(currentPage); // Reload the new page
-        }
-    );
+    try {
+        loadItems(
+            artworksToDisplay, // Use artworksToDisplay for pagination
+            page,
+            limit,
+            (paginatedArtworks) => renderCards(paginatedArtworks, 'artworks'),
+            '#content',
+            (nextPage) => {
+                currentPage = nextPage; // Update the current page
+                renderCurrentPage(currentPage); // Reload the new page
+            }
+        );
+
+        hideLoading(); // Hide spinner after rendering the page
+    } catch (error) {
+        console.error('Error rendering artworks:', error);
+        hideLoading(); // Hide spinner even if there's an error
+    }
 };
 
 // Fetch artworks and load the first page on page load
