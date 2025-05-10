@@ -50,3 +50,6 @@ Home Page View with Pagination
 # Documentation
 Description: The app fetches artwork and store product data from the Art Institute of Chicago API and displays them across two separate HTML pages. Each page shows a maximum of 30 items, with a cap of 210 items fetched total to ensure fast load times and enable pagination. Search feature is only available for artworks. Users can search by keywords related to the item's title, artist, or origin. Search results update in real time with each keystroke.
 
+# Design Reasoning
+Even though the two HTML pages are very similar to one another
+

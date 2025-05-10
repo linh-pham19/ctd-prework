@@ -1,6 +1,8 @@
+export const limit = 30; // Number of artworks per page
+export let currentPage = 1;
+
 export const renderPagination = (pagination, onPageChange) => {
     const { currentPage, totalPages } = pagination;
-    console.log("Total Pages:", totalPages);
 
     // Select the pagination buttons
     const prevButton = document.querySelector('#prevPage');
@@ -31,7 +33,6 @@ export const fetchData = async (url) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("artworks",data.data)
         return data;
     } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -75,8 +76,8 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     // sliced items for the current page
+    console.log("items",items)
     const paginatedItems = items.slice(startIndex, endIndex);
-    console.log(`Page: ${page}, Start Index: ${startIndex}, End Index: ${endIndex}, Items:`, paginatedItems);
 
     // render the items
     document.querySelector(containerSelector).innerHTML = renderFunction(paginatedItems);
@@ -98,7 +99,6 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
         do {
             const url = `${endpoint}?page=${currentPage}&limit=${limit}`;
             const {data: items, pagination} = await fetchData(url);
-            console.log("data from fetch",items)
 
             // Add fetched items to the array
             allItems = allItems.concat(items);
@@ -127,6 +127,28 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
     } catch (error) {
         console.error(`Error fetching items from ${endpoint}:`, error.message);
         throw error;
+    }
+};
+
+export const renderCurrentPage = (page, items, type) => {
+    console.log("items inside renderCurrentPage", items)
+    try {
+        loadItems(
+            items,
+            page,
+            limit,
+            (paginatedItems) => renderCards(paginatedItems, type),
+            '#content',
+            (nextPage) => {
+                currentPage = nextPage; 
+                renderCurrentPage(currentPage, items, type);
+            }
+        );
+
+        hideLoading(); 
+    } catch (error) {
+        console.error('Error rendering artworks:', error);
+        hideLoading(); 
     }
 };
 

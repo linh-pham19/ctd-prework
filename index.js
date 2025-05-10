@@ -1,10 +1,13 @@
-import { renderPagination, fetchItems, loadItems, renderCards, hideLoading, showLoading } from './helper.js';
-let currentPage = 1;
-const limit = 30; // Number of artworks per page
+import { renderCurrentPage, fetchItems, limit, currentPage, hideLoading, showLoading } from './helper.js';
+
+
 let allArtworks = []; // Array to store all fetched artworks
 // decided to use artworksToDisplay to store the artworks that are currently being displayed
 // either the full list or searched results
-let artworksToDisplay = []; // Array to store the current page of artworks
+let artworksToDisplay = []; 
+
+let allProducts = [];
+
 const fetchAllArtworks = async () => {
     try {
         showLoading(); 
@@ -13,47 +16,24 @@ const fetchAllArtworks = async () => {
             endpoint: 'https://api.artic.edu/api/v1/artworks',
             fetchAll: true,
             maxArtworks: 210,
-            limit: 30
+            limit
         });
 
-        allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images
+        allArtworks = artworks.filter(({ image_id }) => image_id); 
         artworksToDisplay = allArtworks;
 
-        hideLoading(); // Hide spinner after successful load
+        hideLoading();
     } catch (error) {
         console.error('Error fetching artworks:', error);
-        hideLoading(); // Hide spinner even if there's an error
+        hideLoading();
     }
 };
 
-// Render the current page of artworks
-const renderCurrentPage = (page) => {
-    try {
-        loadItems(
-            artworksToDisplay, // Use artworksToDisplay for pagination
-            page,
-            limit,
-            (paginatedArtworks) => renderCards(paginatedArtworks, 'artworks'),
-            '#content',
-            (nextPage) => {
-                currentPage = nextPage; // Update the current page
-                renderCurrentPage(currentPage); // Reload the new page
-            }
-        );
-
-        hideLoading(); // Hide spinner after rendering the page
-    } catch (error) {
-        console.error('Error rendering artworks:', error);
-        hideLoading(); // Hide spinner even if there's an error
-    }
-};
-
-// Fetch artworks and load the first page on page load
 fetchAllArtworks().then(() => {
-    renderCurrentPage(currentPage);
+    console.log('All artworks fetched:', artworksToDisplay);
+    renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
 });
 
-//SEARCH FUNCTIONALITY
 const searchArtworks = (searchTerm) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     return allArtworks.filter(({ title, artist_display, place_of_origin }) => {
@@ -68,7 +48,7 @@ const searchArtworks = (searchTerm) => {
 document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
     artworksToDisplay = allArtworks;
-    renderCurrentPage(1);
+    renderCurrentPage(1, artworksToDisplay, 'artworks');
 });
 
 document.querySelector('#search').addEventListener('input', async () => {
@@ -79,5 +59,31 @@ document.querySelector('#search').addEventListener('input', async () => {
         await fetchAllArtworks();
     }
     artworksToDisplay = searchArtworks(searchTerm);
-    renderCurrentPage(1);
+    console.log("items searched", artworksToDisplay)
+    renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
+    // console.log("items searched", artworksToDisplay)
+});
+
+const fetchAllProducts = async () => {
+    try {
+        showLoading('products'); 
+    
+    const { items: products} = await fetchItems({
+        endpoint: 'https://api.artic.edu/api/v1/products',
+        fetchAll: true,
+        maxProducts: 210,
+        limit
+    })
+    allProducts = products;
+    hideLoading('products'); // Hide spinner after loading
+} catch (error) {   
+    hideLoading('products');  
+    console.error('Error fetching products:', error);
+    document.querySelector('#content').innerHTML = `<p>Error loading products. Please try again later.</p>`;
+}
+}
+
+fetchAllProducts().then(() => {
+    console.log('All products fetched:', allProducts);
+    renderCurrentPage(currentPage, allProducts, 'products');
 });
