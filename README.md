@@ -38,3 +38,7 @@ Step 5: Right-click on index.html in the Explorer and select "Open with Live Ser
 
 Step 6:Your default browser will open the app at a local address, such as `http://127.0.0.1:5500/index.html`.
 
+# Upon successful loading of the endpoint to see all artworks 
+![Home Page](./screenshots/ArtworkInitialLoad.png "Home Page on Initial Load")
+
+![Home Page with Pagination](./screenshots/HomePagePagination.png "Home Page on Initial Load with Pagination")
