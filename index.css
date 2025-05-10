@@ -180,7 +180,6 @@ display: none !important; /* Use !important to override any other styles */
 }
 
 .card-price {
-    color: #3498db;
     font-size: 1rem;
     margin: 5px 0;
 }
