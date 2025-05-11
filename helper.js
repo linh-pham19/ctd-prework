@@ -5,8 +5,6 @@ export const renderPagination = (pagination, onPageChange) => {
     const { currentPage, totalPages, containerSelector } = pagination;
     let pageType = '';
     containerSelector === '#artwork-content' ? pageType = 'art' : pageType = 'prod';
-    console.log("inside renderPagination", pagination)
-    // Select the pagination buttons
 
     const prevButton = document.querySelector(`#${pageType}-prevPage`);
     const nextButton = document.querySelector(`#${pageType}-nextPage`);
@@ -152,17 +150,16 @@ export const renderCurrentPage = (page, items, type) => {
             }
         );
 
-        hideLoading(); 
+        hideLoadingSpinner(); 
     } catch (error) {
         console.error('Error rendering artworks:', error);
-        hideLoading(); 
+        hideLoadingSpinner(); 
     }
 };
 
-export const showLoading = () => {
-    document.querySelector('#loading').classList.remove('hidden'); // Show spinner
+export const showLoadingSpinner = () => {
 };
 
-export const hideLoading = () => {
-    document.querySelector('#loading').classList.add('hidden'); // Hide spinner
+export const hideLoadingSpinner = () => {
+    document.querySelector('#loading').classList.add('hidden'); 
 };

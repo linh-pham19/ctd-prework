@@ -1,5 +1,4 @@
-import { renderCurrentPage, fetchItems, limit, currentPage, hideLoading, showLoading } from './helper.js';
-
+import { renderCurrentPage, fetchItems, limit, currentPage, hideLoadingSpinner, showLoadingSpinner } from './helper.js';
 
 let allArtworks = []; // Array to store all fetched artworks
 // decided to use artworksToDisplay to store the artworks that are currently being displayed
@@ -14,29 +13,26 @@ const storeViewButton = document.querySelector('#storeViewButton');
 const artworksView = document.querySelector('#artworksView');
 const storeView = document.querySelector('#storeView');
 
-// Function to show the Artworks view
 const showArtworksView = () => {
-    // console.log("artworksView", artworksView)
     artworksView.classList.remove('hidden');
     storeView.classList.add('hidden');
 };
 
-// Function to show the Store view
 const showStoreView = () => {
-    console.log("storeView", storeView)
     storeView.classList.remove('hidden');
     artworksView.classList.add('hidden');
 };
 
-// Event listeners for view buttons
+
 artworksViewButton.addEventListener('click', showArtworksView);
 storeViewButton.addEventListener('click', showStoreView);
 
-// Default to Artworks view on page load
+// Show artworks view by default
 showArtworksView();
+
 const fetchAllArtworks = async () => {
     try {
-        showLoading(); 
+        showLoadingSpinner(); 
 
         const { items: artworks } = await fetchItems({
             endpoint: 'https://api.artic.edu/api/v1/artworks',
@@ -48,10 +44,10 @@ const fetchAllArtworks = async () => {
         allArtworks = artworks.filter(({ image_id }) => image_id); 
         artworksToDisplay = allArtworks;
 
-        hideLoading();
+        hideLoadingSpinner();
     } catch (error) {
         console.error('Error fetching artworks:', error);
-        hideLoading();
+        hideLoadingSpinner();
     }
 };
 
@@ -109,7 +105,7 @@ document.querySelector('#storeViewButton').addEventListener('click', () => {
 
 const fetchAllProducts = async () => {
     try {
-        showLoading('products'); 
+        showLoadingSpinner('products'); 
     
     const { items: products} = await fetchItems({
         endpoint: 'https://api.artic.edu/api/v1/products',
@@ -118,9 +114,9 @@ const fetchAllProducts = async () => {
         limit
     })
     allProducts = products;
-    hideLoading(); // Hide spinner after loading
+    hideLoadingSpinner(); 
 } catch (error) {   
-    hideLoading();  
+    hideLoadingSpinner();  
     console.error('Error fetching products:', error);
     document.querySelector('#content').innerHTML = `<p>Error loading products. Please try again later.</p>`;
 }
@@ -130,12 +126,8 @@ const initializeStoreView = async () => {
     if (allProducts.length === 0) {
         await fetchAllProducts();
     }   
-    // console.log('All products fetched:', allProducts);
+
     renderCurrentPage(currentPage, allProducts, 'products');
 };
 
 initializeArtworksView();
-
-// document.querySelector(`#storeLink`).onclick = () => {
-//     window.location.href = `index.html`;
-// }

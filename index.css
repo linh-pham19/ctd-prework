@@ -24,7 +24,7 @@ body {
     justify-content: center;
 }
 
-#clearButton, #storeViewButton {
+#clearButton, #storeViewButton, #artworksViewButton {
     background-color: #007bff; 
     color: white; 
     border: none; 
@@ -39,42 +39,15 @@ body {
     background-color: #0056b3; 
     transform: scale(1.05); 
 }
-
-
-#clearButton:active {
-    background-color: #003f7f; 
-    transform: scale(0.95); 
-}
-
-#clearButton:disabled {
-    background-color: #cccccc; 
-    cursor: not-allowed; 
-    opacity: 0.6; 
-}
-
-#storeButton {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #ff6f61; 
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
-  }
   
-  #storeButton:hover {
+#storeButton:hover {
     background-color: #ff3b2f;
     transform: translateY(-2px);
-  }
+}
   
-  #storeButton:active {
+#storeButton:active {
     transform: scale(0.98);
-  }
+}
  
 .card {
     background: #fff;
@@ -100,7 +73,7 @@ body {
     color: #666;
 }
 
-#pagination {
+#prod-pagination, #art-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,7 +81,7 @@ body {
     gap: 10px;
 }
 
-#pagination button {
+#art-pagination button, #prod-pagination button {
     padding: 10px 20px;
     font-size: 1rem;
     border: 1px solid #ddd;
@@ -116,15 +89,6 @@ body {
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.2s ease;
-}
-
-#pagination button:disabled {
-    background-color: #f4f4f9;
-    cursor: not-allowed;
-}
-
-#pagination button:hover:not(:disabled) {
-    background-color: #ddd;
 }
 
 .error-message {
@@ -138,14 +102,14 @@ body {
 #search-container {
     display: flex;
     align-items: center; 
-    gap: 10px; /* Add spacing between the text and the input box */
+    gap: 10px; 
     padding: 20px;
-    justify-content: center; /* Center the container horizontally */
+    justify-content: center;
 }
 
 #search-container h1 {
     font-size: 1.5rem; 
-    margin: 0; /* Remove default margin */
+    margin: 0; 
 }
 
 #search {
@@ -158,7 +122,6 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Hide the loading spinner */
 .hidden-store, .hidden-artwork {
     display: none; 
 }
@@ -193,17 +156,16 @@ body {
     color: #666;
 }
 
-/* Center the spinner on the page */
 .loading {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(5px); /* Apply blur effect to the background */
-    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
-    justify-content: center; /* Center the spinner horizontally */
-    align-items: center; /* Center the spinner vertically */
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.3);
+    justify-content: center; 
+    align-items: center; 
     text-align: center;
     display: flex;
     z-index: 9999;
