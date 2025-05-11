@@ -2,15 +2,19 @@ export const limit = 30; // Number of artworks per page
 export let currentPage = 1;
 
 export const renderPagination = (pagination, onPageChange) => {
-    const { currentPage, totalPages } = pagination;
-
+    const { currentPage, totalPages, containerSelector } = pagination;
+    let pageType = '';
+    containerSelector === '#artwork-content' ? pageType = 'art' : pageType = 'prod';
+    console.log("inside renderPagination", pagination)
     // Select the pagination buttons
-    const prevButton = document.querySelector('#prevPage');
-    const nextButton = document.querySelector('#nextPage');
 
-    document.querySelector('#pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-    document.querySelector('#prevPage').disabled = currentPage === 1;
-    document.querySelector('#nextPage').disabled = currentPage === totalPages;
+    const prevButton = document.querySelector(`#${pageType}-prevPage`);
+    const nextButton = document.querySelector(`#${pageType}-nextPage`);
+
+    console.log("prevButton",document.querySelector(`#${pageType}-pageInfo`) )
+    document.querySelector(`#${pageType}-pageInfo`).textContent = `Page ${currentPage} of ${totalPages}`;
+    document.querySelector(`#${pageType}-prevPage`).disabled = currentPage === 1;
+    document.querySelector(`#${pageType}-nextPage`).disabled = currentPage === totalPages;
 
     // Disable buttons if on first or last page
     prevButton.disabled = currentPage === 1;
@@ -80,10 +84,12 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const paginatedItems = items.slice(startIndex, endIndex);
 
     // render the items
+    console.log("containerSelector", containerSelector)
+    console.log("paginatedItems", renderFunction(paginatedItems))
     document.querySelector(containerSelector).innerHTML = renderFunction(paginatedItems);
 
-    // render pagination
     renderPagination({
+        containerSelector,
         currentPage: page,
         totalPages: Math.ceil(items.length / limit),
     },
@@ -131,14 +137,15 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
 };
 
 export const renderCurrentPage = (page, items, type) => {
-    console.log("items inside renderCurrentPage", items)
+    console.log("Rendering page:", page, "Type:", type);
     try {
+        console.log("type"      , type)
         loadItems(
             items,
             page,
             limit,
             (paginatedItems) => renderCards(paginatedItems, type),
-            '#content',
+            type === 'artworks'? '#artwork-content': '#product-content',
             (nextPage) => {
                 currentPage = nextPage; 
                 renderCurrentPage(currentPage, items, type);

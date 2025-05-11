@@ -50,6 +50,6 @@ fetchAllProducts().then(() => {
 });
 
 // create a function to handle click return to artworks
-document.querySelector(`#storeLink`).onclick = () => {
-    window.location.href = `index.html`;
-}
+// document.querySelector(`#storeLink`).onclick = () => {
+//     window.location.href = `index.html`;
+// }

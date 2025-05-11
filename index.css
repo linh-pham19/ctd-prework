@@ -16,7 +16,7 @@ body {
     color: white; 
 }
 
-#content {
+#store-content, #artwork-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
@@ -24,7 +24,7 @@ body {
     justify-content: center;
 }
 
-#clearButton, #storeLink {
+#clearButton, #storeViewButton {
     background-color: #007bff; 
     color: white; 
     border: none; 
@@ -85,9 +85,9 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     /* Prevent stretching */
-    width: 300px; /* Fixed width for the card */
-    height: auto; /* Let the height adjust based on content */
-    margin: 0 auto; /* Center the card horizontally */
+    width: 300px; 
+    height: auto; 
+    margin: 0 auto; 
 }
 
 .card:hover {
@@ -137,14 +137,14 @@ body {
 
 #search-container {
     display: flex;
-    align-items: center; /* Vertically align the text and input box */
+    align-items: center; 
     gap: 10px; /* Add spacing between the text and the input box */
     padding: 20px;
     justify-content: center; /* Center the container horizontally */
 }
 
 #search-container h1 {
-    font-size: 1.5rem; /* Adjust the font size of the heading */
+    font-size: 1.5rem; 
     margin: 0; /* Remove default margin */
 }
 
@@ -159,8 +159,12 @@ body {
 }
 
 /* Hide the loading spinner */
+.hidden-store, .hidden-artwork {
+    display: none; 
+}
+
 .hidden {
-display: none !important; /* Use !important to override any other styles */
+    display: none !important; /* Use !important to override any other styles */
 }
 
 .card-image {
