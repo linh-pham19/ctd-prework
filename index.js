@@ -118,9 +118,9 @@ const fetchAllProducts = async () => {
         limit
     })
     allProducts = products;
-    hideLoading('products'); // Hide spinner after loading
+    hideLoading(); // Hide spinner after loading
 } catch (error) {   
-    hideLoading('products');  
+    hideLoading();  
     console.error('Error fetching products:', error);
     document.querySelector('#content').innerHTML = `<p>Error loading products. Please try again later.</p>`;
 }

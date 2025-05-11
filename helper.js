@@ -163,6 +163,6 @@ export const showLoading = () => {
     document.querySelector('#loading').classList.remove('hidden'); // Show spinner
 };
 
-export const hideLoading = (type) => {
+export const hideLoading = () => {
     document.querySelector('#loading').classList.add('hidden'); // Hide spinner
 };
