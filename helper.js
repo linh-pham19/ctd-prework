@@ -1,14 +1,18 @@
+export const limit = 30; // Number of artworks per page
+export let currentPage = 1;
+
 export const renderPagination = (pagination, onPageChange) => {
-    const { currentPage, totalPages } = pagination;
-    console.log("Total Pages:", totalPages);
+    const { currentPage, totalPages, containerSelector } = pagination;
+    let pageType = '';
+    containerSelector === '#artwork-content' ? pageType = 'art' : pageType = 'prod';
 
-    // Select the pagination buttons
-    const prevButton = document.querySelector('#prevPage');
-    const nextButton = document.querySelector('#nextPage');
+    const prevButton = document.querySelector(`#${pageType}-prevPage`);
+    const nextButton = document.querySelector(`#${pageType}-nextPage`);
 
-    document.querySelector('#pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-    document.querySelector('#prevPage').disabled = currentPage === 1;
-    document.querySelector('#nextPage').disabled = currentPage === totalPages;
+    console.log("prevButton",document.querySelector(`#${pageType}-pageInfo`) )
+    document.querySelector(`#${pageType}-pageInfo`).textContent = `Page ${currentPage} of ${totalPages}`;
+    document.querySelector(`#${pageType}-prevPage`).disabled = currentPage === 1;
+    document.querySelector(`#${pageType}-nextPage`).disabled = currentPage === totalPages;
 
     // Disable buttons if on first or last page
     prevButton.disabled = currentPage === 1;
@@ -31,7 +35,6 @@ export const fetchData = async (url) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("artworks",data.data)
         return data;
     } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -75,14 +78,16 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     // sliced items for the current page
+    console.log("items",items)
     const paginatedItems = items.slice(startIndex, endIndex);
-    console.log(`Page: ${page}, Start Index: ${startIndex}, End Index: ${endIndex}, Items:`, paginatedItems);
 
     // render the items
+    console.log("containerSelector", containerSelector)
+    console.log("paginatedItems", renderFunction(paginatedItems))
     document.querySelector(containerSelector).innerHTML = renderFunction(paginatedItems);
 
-    // render pagination
     renderPagination({
+        containerSelector,
         currentPage: page,
         totalPages: Math.ceil(items.length / limit),
     },
@@ -98,7 +103,6 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
         do {
             const url = `${endpoint}?page=${currentPage}&limit=${limit}`;
             const {data: items, pagination} = await fetchData(url);
-            console.log("data from fetch",items)
 
             // Add fetched items to the array
             allItems = allItems.concat(items);
@@ -130,10 +134,32 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
     }
 };
 
-export const showLoading = () => {
-    document.querySelector('#loading').classList.remove('hidden'); // Show spinner
+export const renderCurrentPage = (page, items, type) => {
+    console.log("Rendering page:", page, "Type:", type);
+    try {
+        console.log("type"      , type)
+        loadItems(
+            items,
+            page,
+            limit,
+            (paginatedItems) => renderCards(paginatedItems, type),
+            type === 'artworks'? '#artwork-content': '#product-content',
+            (nextPage) => {
+                currentPage = nextPage; 
+                renderCurrentPage(currentPage, items, type);
+            }
+        );
+
+        hideLoadingSpinner(); 
+    } catch (error) {
+        console.error('Error rendering artworks:', error);
+        hideLoadingSpinner(); 
+    }
 };
 
-export const hideLoading = (type) => {
-    document.querySelector('#loading').classList.add('hidden'); // Hide spinner
+export const showLoadingSpinner = () => {
+};
+
+export const hideLoadingSpinner = () => {
+    document.querySelector('#loading').classList.add('hidden'); 
 };

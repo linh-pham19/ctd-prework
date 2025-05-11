@@ -39,14 +39,14 @@ Step 5: Right-click on index.html in the Explorer and select "Open with Live Ser
 Step 6:Your default browser will open the app at a local address, such as `http://127.0.0.1:5500/index.html`.
 
 # Upon successful loading of the endpoint to see all artworks 
-![Home Page](./screenshots/ArtworkInitialLoad.png "Home Page on Initial Load")
-
-![Home Page with Pagination](./screenshots/HomePagePagination.png "Home Page on Initial Load with Pagination")
-Home Page View with Pagination
+![Home/Artwork Page](./screenshots/ArtworkWPagination.png "Home/Artwork Page on Initial Load")
+Home Page/Artwork Page on Initial
 
 # After you click on `Visit our online store` button
-![Store View](./screenshots/HomePagePagination.png "Store View")
+![Store View](./screenshots/StoreWPagination.png "Store View")
+Store Page 
 
 # Documentation
 Description: The app fetches artwork and store product data from the Art Institute of Chicago API and displays them across two separate HTML pages. Each page shows a maximum of 30 items, with a cap of 210 items fetched total to ensure fast load times and enable pagination. Search feature is only available for artworks. Users can search by keywords related to the item's title, artist, or origin. Search results update in real time with each keystroke.
+
 

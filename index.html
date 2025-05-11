@@ -12,28 +12,44 @@
     <div id="root">
         <div id="navbar">
                 <h1>Welcome to the Art Institute of Chicago</h1>
+                <nav>
+                    <button id="artworksViewButton">View Artworks</button>
+                    <button id="storeViewButton">Visit Our Online Store</button>
+                </nav>
         </div>
 
-        <div id="loading" class="loading hidden">
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading hidden2">
             <div class="spinner"></div>
             <p>Loading...</p>
         </div>
 
-        <div id="search-container">
-            <h1>Search for artworks:</h1>
-            <input type="text" id="search" placeholder="Please enter your search keywords here" />
-            <button id="clearButton">Clear All</button>
-            <a href="store.html" id="storeButton">Visit our online store</a>
-        </div>
-      
-        <div id="content">Please wait. Loading artworks...</div>
-        <div id="message" class="error-message"></div>
+        <!-- Artworks View -->
+        <div id="artworksView">
+            <div id="search-container">
+                <h1>Search for artworks:</h1>
+                <input type="text" id="search" placeholder="Please enter your search keywords here" />
+                <button id="clearButton">Clear All</button>
+            </div>
 
-        <div id="pagination">
-            <button id="prevPage" disabled>Previous</button>
-            <span id="pageInfo"></span>
-            <button id="nextPage">Next</button>
+            <div id="artwork-content">Please wait. Loading artworks...</div>
+            <div id="message" class="error-message"></div>
+
+            <div id="art-pagination">
+                <button id="art-prevPage" disabled>Previous</button>
+                <span id="art-pageInfo"></span>
+                <button id="art-nextPage">Next</button>
+            </div>
         </div>
+    
+         <!-- Store View -->
+    <div id="storeView" class="hiddenStore">
+    <div id="product-content">Loading store products...</div>
+    <div id="prod-pagination">
+        <button id="prod-prevPage" disabled>Previous</button>
+        <span id="prod-pageInfo"></span>
+        <button id="prod-nextPage">Next</button>
+    </div>
     </div>
     <script src="index.js" type="module"></script>
 </body>

@@ -1,59 +1,65 @@
-import { renderPagination, fetchItems, loadItems, renderCards, hideLoading, showLoading } from './helper.js';
-let currentPage = 1;
-const limit = 30; // Number of artworks per page
+import { renderCurrentPage, fetchItems, limit, currentPage, hideLoadingSpinner, showLoadingSpinner } from './helper.js';
+
 let allArtworks = []; // Array to store all fetched artworks
 // decided to use artworksToDisplay to store the artworks that are currently being displayed
 // either the full list or searched results
-let artworksToDisplay = []; // Array to store the current page of artworks
+let artworksToDisplay = []; 
+
+let allProducts = [];
+
+// Select view buttons and containers
+const artworksViewButton = document.querySelector('#artworksViewButton');
+const storeViewButton = document.querySelector('#storeViewButton');
+const artworksView = document.querySelector('#artworksView');
+const storeView = document.querySelector('#storeView');
+
+const showArtworksView = () => {
+    artworksView.classList.remove('hidden');
+    storeView.classList.add('hidden');
+};
+
+const showStoreView = () => {
+    storeView.classList.remove('hidden');
+    artworksView.classList.add('hidden');
+};
+
+
+artworksViewButton.addEventListener('click', showArtworksView);
+storeViewButton.addEventListener('click', showStoreView);
+
+// Show artworks view by default
+showArtworksView();
+
 const fetchAllArtworks = async () => {
     try {
-        showLoading(); 
+        showLoadingSpinner(); 
 
         const { items: artworks } = await fetchItems({
             endpoint: 'https://api.artic.edu/api/v1/artworks',
             fetchAll: true,
             maxArtworks: 210,
-            limit: 30
+            limit
         });
 
-        allArtworks = artworks.filter(({ image_id }) => image_id); // Filter out artworks without images
+        allArtworks = artworks.filter(({ image_id }) => image_id); 
         artworksToDisplay = allArtworks;
 
-        hideLoading(); // Hide spinner after successful load
+        hideLoadingSpinner();
     } catch (error) {
         console.error('Error fetching artworks:', error);
-        hideLoading(); // Hide spinner even if there's an error
+        hideLoadingSpinner();
     }
 };
 
-// Render the current page of artworks
-const renderCurrentPage = (page) => {
-    try {
-        loadItems(
-            artworksToDisplay, // Use artworksToDisplay for pagination
-            page,
-            limit,
-            (paginatedArtworks) => renderCards(paginatedArtworks, 'artworks'),
-            '#content',
-            (nextPage) => {
-                currentPage = nextPage; // Update the current page
-                renderCurrentPage(currentPage); // Reload the new page
-            }
-        );
-
-        hideLoading(); // Hide spinner after rendering the page
-    } catch (error) {
-        console.error('Error rendering artworks:', error);
-        hideLoading(); // Hide spinner even if there's an error
+const initializeArtworksView = async () => {
+    // only fetch artworks if they haven't been fetched
+    if (allArtworks.length === 0) {
+        await fetchAllArtworks();
     }
+    // console.log('All artworks fetched:', artworksToDisplay);
+    renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
 };
 
-// Fetch artworks and load the first page on page load
-fetchAllArtworks().then(() => {
-    renderCurrentPage(currentPage);
-});
-
-//SEARCH FUNCTIONALITY
 const searchArtworks = (searchTerm) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     return allArtworks.filter(({ title, artist_display, place_of_origin }) => {
@@ -68,7 +74,7 @@ const searchArtworks = (searchTerm) => {
 document.querySelector('#clearButton').addEventListener('click', () => {
     document.querySelector('#search').value = '';
     artworksToDisplay = allArtworks;
-    renderCurrentPage(1);
+    renderCurrentPage(1, artworksToDisplay, 'artworks');
 });
 
 document.querySelector('#search').addEventListener('input', async () => {
@@ -79,5 +85,49 @@ document.querySelector('#search').addEventListener('input', async () => {
         await fetchAllArtworks();
     }
     artworksToDisplay = searchArtworks(searchTerm);
-    renderCurrentPage(1);
+    // console.log("items searched", artworksToDisplay)
+    renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
+    // console.log("items searched", artworksToDisplay)
 });
+
+// Event listeners for view switching
+document.querySelector('#artworksViewButton').addEventListener('click', () => {
+    document.querySelector('#artworksView').classList.remove('hidden');
+    document.querySelector('#storeView').classList.add('hidden');
+    initializeArtworksView();
+});
+
+document.querySelector('#storeViewButton').addEventListener('click', () => {
+    document.querySelector('#storeView').classList.remove('hidden');
+    document.querySelector('#artworksView').classList.add('hidden');
+    initializeStoreView();
+});
+
+const fetchAllProducts = async () => {
+    try {
+        showLoadingSpinner('products'); 
+    
+    const { items: products} = await fetchItems({
+        endpoint: 'https://api.artic.edu/api/v1/products',
+        fetchAll: true,
+        maxProducts: 210,
+        limit
+    })
+    allProducts = products;
+    hideLoadingSpinner(); 
+} catch (error) {   
+    hideLoadingSpinner();  
+    console.error('Error fetching products:', error);
+    document.querySelector('#content').innerHTML = `<p>Error loading products. Please try again later.</p>`;
+}
+}
+
+const initializeStoreView = async () => {
+    if (allProducts.length === 0) {
+        await fetchAllProducts();
+    }   
+
+    renderCurrentPage(currentPage, allProducts, 'products');
+};
+
+initializeArtworksView();
