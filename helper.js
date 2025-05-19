@@ -9,7 +9,6 @@ export const renderPagination = (pagination, onPageChange) => {
     const prevButton = document.querySelector(`#${pageType}-prevPage`);
     const nextButton = document.querySelector(`#${pageType}-nextPage`);
 
-    console.log("prevButton",document.querySelector(`#${pageType}-pageInfo`) )
     document.querySelector(`#${pageType}-pageInfo`).textContent = `Page ${currentPage} of ${totalPages}`;
     document.querySelector(`#${pageType}-prevPage`).disabled = currentPage === 1;
     document.querySelector(`#${pageType}-nextPage`).disabled = currentPage === totalPages;
@@ -78,12 +77,10 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     // sliced items for the current page
-    console.log("items",items)
+
     const paginatedItems = items.slice(startIndex, endIndex);
 
     // render the items
-    console.log("containerSelector", containerSelector)
-    console.log("paginatedItems", renderFunction(paginatedItems))
     document.querySelector(containerSelector).innerHTML = renderFunction(paginatedItems);
 
     renderPagination({
@@ -135,9 +132,8 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
 };
 
 export const renderCurrentPage = (page, items, type) => {
-    console.log("Rendering page:", page, "Type:", type);
+
     try {
-        console.log("type"      , type)
         loadItems(
             items,
             page,

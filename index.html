@@ -11,11 +11,13 @@
 <body>
     <div id="root">
         <div id="navbar">
-                <h1>Welcome to the Art Institute of Chicago</h1>
-                <nav>
+            <h1>Welcome to the Art Institute of Chicago</h1>
+            <nav>
+                <div id="nav-buttons">
                     <button id="artworksViewButton">View Artworks</button>
                     <button id="storeViewButton">Visit Our Online Store</button>
-                </nav>
+                </div>
+            </nav>
         </div>
 
         <!-- Loading Spinner -->
@@ -41,17 +43,27 @@
                 <button id="art-nextPage">Next</button>
             </div>
         </div>
-    
-         <!-- Store View -->
-    <div id="storeView" class="hiddenStore">
-    <div id="product-content">Loading store products...</div>
-    <div id="prod-pagination">
-        <button id="prod-prevPage" disabled>Previous</button>
-        <span id="prod-pageInfo"></span>
-        <button id="prod-nextPage">Next</button>
-    </div>
-    </div>
-    <script src="index.js" type="module"></script>
+
+        <!-- Store View -->
+        <div id="storeView" class="hiddenStore">
+            <div id="price-filter-container">
+                <label for="priceFilter">Filter by Price:</label>
+                <select id="priceFilter">
+                    <option value="all">All</option>
+                    <option value="0-10">Under $10</option>
+                    <option value="10-50">$10 - $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100+">Above $100</option>
+                </select>
+            </div>
+            <div id="product-content">Loading store products...</div>
+            <div id="prod-pagination">
+                <button id="prod-prevPage" disabled>Previous</button>
+                <span id="prod-pageInfo"></span>
+                <button id="prod-nextPage">Next</button>
+            </div>
+        </div>
+        <script src="index.js" type="module"></script>
 </body>
 
 </html>
