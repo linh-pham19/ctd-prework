@@ -56,7 +56,7 @@ const initializeArtworksView = async () => {
     if (allArtworks.length === 0) {
         await fetchAllArtworks();
     }
-    // console.log('All artworks fetched:', artworksToDisplay);
+
     renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
 };
 
@@ -85,9 +85,7 @@ document.querySelector('#search').addEventListener('input', async () => {
         await fetchAllArtworks();
     }
     artworksToDisplay = searchArtworks(searchTerm);
-    // console.log("items searched", artworksToDisplay)
     renderCurrentPage(currentPage, artworksToDisplay, 'artworks');
-    // console.log("items searched", artworksToDisplay)
 });
 
 // Event listeners for view switching
@@ -121,6 +119,51 @@ const fetchAllProducts = async () => {
     document.querySelector('#content').innerHTML = `<p>Error loading products. Please try again later.</p>`;
 }
 }
+
+
+const filterProductsByPrice = (priceRange) => {
+    if (priceRange === 'all') {
+        return allProducts;
+    }
+    
+    return allProducts.filter(({ price_display }) => {
+        // Skip products without price_display
+        if (!price_display) return false;
+
+        // Remove $ and other non-numeric characters from price_display
+        const priceMatch = price_display.match(/\$\s*([0-9]+(\.[0-9]+)?)/) || 0;
+        
+          // If no match found, skip this product
+          if (!priceMatch) return false;
+        
+          // Extract the numeric price value from the match
+          const price = Number(priceMatch[1]) || 0;
+
+        // Check if the price falls within the selected range
+        switch (priceRange) {
+            case '0-10':
+                return price < 10;
+            case '10-50':
+                return price >= 10 && price < 50; 
+            case '50-100':
+                return price >= 50 && price < 100; 
+            case '100+':
+                return price >= 100; 
+            default:
+                return false;
+        }
+    });
+};
+
+document.querySelector('#priceFilter').addEventListener('change', () => {
+    const priceRange = document.querySelector('#priceFilter').value;
+
+    // Filter the products based on the selected price range
+    const filteredProducts = filterProductsByPrice(priceRange);
+
+    // Render the filtered products
+    renderCurrentPage(1, filteredProducts, 'products');
+});
 
 const initializeStoreView = async () => {
     if (allProducts.length === 0) {

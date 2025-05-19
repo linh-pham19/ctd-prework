@@ -16,6 +16,31 @@ body {
     color: white; 
 }
 
+#nav-buttons {
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#navbar h1 {
+    text-align: center;
+    margin: 0 auto;
+    padding: 10px 0;
+    font-size: 1.8rem; /* Default size */
+}
+
+@media (max-width: 768px) {
+    #navbar h1 {
+        font-size: 1.5rem; /* Smaller size for tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    #navbar h1 {
+        font-size: 1.2rem; /* Even smaller for phones */
+    }
+}
+
 #product-content, #artwork-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
