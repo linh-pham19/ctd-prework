@@ -77,7 +77,7 @@ export const loadItems = (items, page, limit, renderFunction, containerSelector,
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     // sliced items for the current page
-    console.log("items",items)
+
     const paginatedItems = items.slice(startIndex, endIndex);
 
     // render the items
@@ -132,9 +132,8 @@ export const fetchItems = async ({ endpoint, page = 1, limit = 100, fetchAll = f
 };
 
 export const renderCurrentPage = (page, items, type) => {
-    console.log("Rendering page:", page, "Type:", type);
+
     try {
-        console.log("type"      , type)
         loadItems(
             items,
             page,
