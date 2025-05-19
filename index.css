@@ -214,6 +214,35 @@ body {
     }
 }
 
+/* Button hover and focus effects */
+#clearButton:hover, #storeViewButton:hover, #artworksViewButton:hover,
+#art-pagination button:hover, #prod-pagination button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight upward movement */
+}
 
+/* Focus styles - important for accessibility */
+#clearButton:focus, #storeViewButton:focus, #artworksViewButton:focus,
+#art-pagination button:focus, #prod-pagination button:focus {
+    outline: 3px solid #4d90fe; /* Blue outline */
+    outline-offset: 2px; /* Space between button and outline */
+}
 
+/* Hover + focus styles for pagination buttons */
+#art-pagination button:not(:disabled):hover,
+#prod-pagination button:not(:disabled):hover {
+    background-color: #f0f0f0;
+}
 
+/* Style for disabled buttons */
+#art-pagination button:disabled,
+#prod-pagination button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Combined hover and focus effect for select element */
+#priceFilter:hover, #priceFilter:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
